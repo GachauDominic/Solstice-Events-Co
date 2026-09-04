@@ -1,33 +1,33 @@
 {
   "pages": {
     "/_not-found/page": [
-      "static/chunks/webpack-23e1f4185aab8fb2.js",
+      "static/chunks/webpack-4011e8c40575bfca.js",
       "static/chunks/94c12b52-294c575e3f3dcb08.js",
-      "static/chunks/842-58b32d411831db17.js",
-      "static/chunks/main-app-f2ba1026a32fda29.js",
-      "static/chunks/app/_not-found/page-f5b325886e6aaffc.js"
+      "static/chunks/842-113a251f897d9ece.js",
+      "static/chunks/main-app-02462684bc4c697d.js",
+      "static/chunks/app/_not-found/page-0a69d80c215e552c.js"
     ],
     "/layout": [
-      "static/chunks/webpack-23e1f4185aab8fb2.js",
+      "static/chunks/webpack-4011e8c40575bfca.js",
       "static/chunks/94c12b52-294c575e3f3dcb08.js",
-      "static/chunks/842-58b32d411831db17.js",
-      "static/chunks/main-app-f2ba1026a32fda29.js",
+      "static/chunks/842-113a251f897d9ece.js",
+      "static/chunks/main-app-02462684bc4c697d.js",
       "static/css/4a82dcb7cb752acb.css",
-      "static/chunks/app/layout-7416a1fc1d83b7e3.js"
+      "static/chunks/app/layout-e775c8872a21915b.js"
     ],
     "/page": [
-      "static/chunks/webpack-23e1f4185aab8fb2.js",
+      "static/chunks/webpack-4011e8c40575bfca.js",
       "static/chunks/94c12b52-294c575e3f3dcb08.js",
-      "static/chunks/842-58b32d411831db17.js",
-      "static/chunks/main-app-f2ba1026a32fda29.js",
-      "static/chunks/app/page-9be087198f292f8e.js"
+      "static/chunks/842-113a251f897d9ece.js",
+      "static/chunks/main-app-02462684bc4c697d.js",
+      "static/chunks/app/page-c003ad7c80517256.js"
     ],
     "/register/page": [
-      "static/chunks/webpack-23e1f4185aab8fb2.js",
+      "static/chunks/webpack-4011e8c40575bfca.js",
       "static/chunks/94c12b52-294c575e3f3dcb08.js",
-      "static/chunks/842-58b32d411831db17.js",
-      "static/chunks/main-app-f2ba1026a32fda29.js",
-      "static/chunks/app/register/page-2a7a92f80347e896.js"
+      "static/chunks/842-113a251f897d9ece.js",
+      "static/chunks/main-app-02462684bc4c697d.js",
+      "static/chunks/app/register/page-1a6ab96b9ba52da4.js"
     ]
   }
 }

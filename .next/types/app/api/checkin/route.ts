@@ -1,4 +1,4 @@
-// File: C:\Users\gacha\OneDrive\Desktop\solstice-checkin 1\app\api\checkin\route.ts
+// File: C:\Users\gacha\OneDrive\Desktop\solstice-checkin\app\api\checkin\route.ts
 import * as entry from '../../../../../app/api/checkin/route.js'
 import type { NextRequest } from 'next/server.js'
 

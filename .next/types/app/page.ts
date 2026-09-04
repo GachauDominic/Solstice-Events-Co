@@ -1,4 +1,4 @@
-// File: C:\Users\gacha\OneDrive\Desktop\solstice-checkin 1\app\page.tsx
+// File: C:\Users\gacha\OneDrive\Desktop\solstice-checkin\app\page.tsx
 import * as entry from '../../../app/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

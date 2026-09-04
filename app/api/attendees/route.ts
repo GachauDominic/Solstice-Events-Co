@@ -27,17 +27,16 @@ export async function POST(req: NextRequest) {
   }
 
   const { token, payload } = generateQrToken();
+  const qrImage = await renderQrDataUrl(payload);
 
   const [attendee] = await db
     .insert(attendees)
-    .values({ name: parsed.data.name, qrCode: token })
+    .values({ name: parsed.data.name, qrCode: token, qrImage })
     .returning();
 
   if (!attendee) {
     return NextResponse.json({ error: "Could not create attendee" }, { status: 500 });
   }
-
-  const qrDataUrl = await renderQrDataUrl(payload);
 
   return NextResponse.json(
     {
@@ -48,7 +47,10 @@ export async function POST(req: NextRequest) {
         revokedAt: attendee.revokedAt,
         status: attendee.status,
       },
-      qrDataUrl, // PNG data URL, ready to render or download
+      // Served straight from the row we just persisted - this is exactly
+      // what GET /api/attendees/:id/qr will return later, so "create" and
+      // "re-fetch after the fact" always agree.
+      qrDataUrl: attendee.qrImage,
     },
     { status: 201 }
   );
@@ -60,6 +62,7 @@ export async function GET() {
       id: attendees.id,
       name: attendees.name,
       qrCode: attendees.qrCode,
+      qrImage: attendees.qrImage,
       revokedAt: attendees.revokedAt,
       status: attendees.status,
       createdAt: attendees.createdAt,

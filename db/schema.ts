@@ -22,6 +22,15 @@ export const checkInStatus = pgEnum("check_in_status", [
 export const attendees = pgTable("attendees", {
   id: uuid("id").defaultRandom().primaryKey(),
   qrCode: varchar("qr_code", { length: 128 }).notNull().unique(),
+  // The rendered QR badge image (PNG data URL) for this attendee, generated
+  // once at creation time from the same payload encoded in qrCode. Persisted
+  // here so it can be downloaded/printed at any time after creation without
+  // needing to be regenerated - e.g. from the registration desk's attendee
+  // list days later, not just in the immediate response to POST /attendees.
+  // Nullable only to allow existing pre-feature rows to be self-healed on
+  // first access (see app/api/attendees/[id]/qr/route.ts) rather than
+  // requiring a blocking backfill migration.
+  qrImage: text("qr_image"),
   name: varchar("name", { length: 256 }).notNull(),
   revokedAt: timestamp("revoked_at", { withTimezone: true }),
   status: attendeeStatus("status").notNull().default("NOT_CHECKED_IN"),

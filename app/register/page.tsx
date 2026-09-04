@@ -1,6 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
+type Attendee = {
+  id: string;
+  name: string;
+  qrCode: string;
+  qrImage: string | null;
+  status: string;
+  revokedAt: string | null;
+  createdAt?: string;
+};
 
 type CreatedAttendee = {
   attendee: { id: string; name: string };
@@ -12,6 +22,22 @@ export default function RegisterPage() {
   const [created, setCreated] = useState<CreatedAttendee | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [attendees, setAttendees] = useState<Attendee[]>([]);
+  const [printing, setPrinting] = useState<{ name: string; qrImage: string } | null>(null);
+
+  async function loadAttendees() {
+    try {
+      const res = await fetch("/api/attendees");
+      const data = await res.json();
+      if (res.ok) setAttendees(data.attendees ?? []);
+    } catch {
+      // Non-fatal - the list is a convenience view, registration still works.
+    }
+  }
+
+  useEffect(() => {
+    loadAttendees();
+  }, []);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -30,6 +56,7 @@ export default function RegisterPage() {
       }
       setCreated(data);
       setName("");
+      loadAttendees();
     } catch {
       setError("Could not reach the server.");
     } finally {
@@ -37,8 +64,24 @@ export default function RegisterPage() {
     }
   }
 
+  function handlePrint(name: string, qrImage: string) {
+    setPrinting({ name, qrImage });
+    // Let the printable node render before invoking the browser print
+    // dialog - it's the only thing visible under the @media print rule.
+    requestAnimationFrame(() => window.print());
+  }
+
   return (
     <main style={styles.stage}>
+      <style>{`
+        .print-only { position: absolute; left: -9999px; top: -9999px; }
+        @media print {
+          body * { visibility: hidden; }
+          #printable-badge, #printable-badge * { visibility: visible; }
+          #printable-badge.print-only { position: fixed; left: 0; top: 0; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        }
+      `}</style>
+
       <div style={styles.frame}>
         <header style={styles.header}>
           <span style={styles.eyebrow}>SOLSTICE EVENTS CO.</span>
@@ -56,14 +99,68 @@ export default function RegisterPage() {
           <div style={styles.result}>
             <p style={{ margin: "0 0 12px", fontFamily: "var(--mono)" }}>{created.attendee.name}</p>
             <img src={created.qrDataUrl} alt="Generated badge QR code" width={220} height={220} style={{ borderRadius: 3, background: "#fff", padding: 8 }} />
-            <p style={{ marginTop: 12 }}>
+            <div style={{ marginTop: 12, display: "flex", gap: 16 }}>
               <a href={created.qrDataUrl} download={`${created.attendee.name}-badge.png`} style={{ color: "var(--coral)" }}>
                 Download badge QR
               </a>
+              <button
+                type="button"
+                onClick={() => handlePrint(created.attendee.name, created.qrDataUrl)}
+                style={{ ...styles.button, padding: "4px 12px", marginTop: 0 }}
+              >
+                Print badge
+              </button>
+            </div>
+            <p style={{ marginTop: 10, fontSize: 12, color: "var(--muted)" }}>
+              Saved - this badge can be downloaded or reprinted anytime from the list below.
             </p>
           </div>
         )}
       </div>
+
+      <div style={{ ...styles.frame, marginTop: 20 }}>
+        <h2 style={{ fontSize: 16, margin: "0 0 14px" }}>Registered attendees</h2>
+        {attendees.length === 0 ? (
+          <p style={{ color: "var(--muted)", fontSize: 14 }}>No attendees yet.</p>
+        ) : (
+          <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: 12 }}>
+            {attendees.map((a) => (
+              <li key={a.id} style={styles.row}>
+                {a.qrImage && (
+                  <img src={a.qrImage} alt={`${a.name} badge QR`} width={48} height={48} style={{ borderRadius: 3, background: "#fff", padding: 4 }} />
+                )}
+                <div style={{ flex: 1 }}>
+                  <p style={{ margin: 0, fontFamily: "var(--mono)", fontSize: 14 }}>{a.name}</p>
+                  <p style={{ margin: 0, fontSize: 12, color: "var(--muted)" }}>
+                    {a.revokedAt ? "Revoked" : a.status}
+                  </p>
+                </div>
+                {a.qrImage && (
+                  <>
+                    <a href={a.qrImage} download={`${a.name}-badge.png`} style={{ color: "var(--coral)", fontSize: 13 }}>
+                      Download
+                    </a>
+                    <button
+                      type="button"
+                      onClick={() => handlePrint(a.name, a.qrImage!)}
+                      style={{ ...styles.button, padding: "4px 12px", marginTop: 0, fontSize: 13 }}
+                    >
+                      Print
+                    </button>
+                  </>
+                )}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+
+      {printing && (
+        <div id="printable-badge" className="print-only">
+          <p style={{ fontFamily: "var(--mono)", fontSize: 16, marginBottom: 12 }}>{printing.name}</p>
+          <img src={printing.qrImage} alt={`${printing.name} badge QR`} width={280} height={280} />
+        </div>
+      )}
     </main>
   );
 }
@@ -79,4 +176,5 @@ const styles: Record<string, React.CSSProperties> = {
   input: { width: "100%", padding: "10px 12px", background: "var(--ink)", border: "1px solid var(--line)", borderRadius: 3, color: "var(--paper)", fontSize: 14 },
   button: { marginTop: 6, padding: "12px 20px", background: "var(--paper)", color: "var(--ink)", border: "none", borderRadius: 3, fontWeight: 600, cursor: "pointer" },
   result: { marginTop: 24, paddingTop: 24, borderTop: "1px solid var(--line)" },
+  row: { display: "flex", alignItems: "center", gap: 12, padding: "8px 0", borderBottom: "1px solid var(--line)" },
 };

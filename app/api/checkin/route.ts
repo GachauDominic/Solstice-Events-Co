@@ -3,6 +3,7 @@ import { eq, and, inArray } from "drizzle-orm";
 import { db, isUniqueViolation } from "@/db/client";
 import { attendees, checkIns } from "@/db/schema";
 import { publishPrintJob } from "@/lib/printerVendor";
+import { verifyQrPayload } from "@/lib/qr";
 
 export const runtime = "nodejs";
 
@@ -17,8 +18,17 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "qrCode is required" }, { status: 400 });
   }
 
+  // The printed/displayed QR encodes the signed payload (token.signature),
+  // not the bare token stored in attendees.qr_code - this verifies the
+  // signature and recovers the token to look up, rejecting a malformed or
+  // tampered scan before ever hitting the database.
+  const token = verifyQrPayload(qrCode);
+  if (!token) {
+    return NextResponse.json({ error: "Unknown QR code" }, { status: 404 });
+  }
+
   const attendee = await db.query.attendees.findFirst({
-    where: eq(attendees.qrCode, qrCode),
+    where: eq(attendees.qrCode, token),
   });
 
   if (!attendee) {

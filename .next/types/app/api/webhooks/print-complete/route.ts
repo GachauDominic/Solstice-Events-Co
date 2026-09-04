@@ -1,4 +1,4 @@
-// File: C:\Users\gacha\OneDrive\Desktop\solstice-checkin 1\app\api\webhooks\print-complete\route.ts
+// File: C:\Users\gacha\OneDrive\Desktop\solstice-checkin\app\api\webhooks\print-complete\route.ts
 import * as entry from '../../../../../../app/api/webhooks/print-complete/route.js'
 import type { NextRequest } from 'next/server.js'
 

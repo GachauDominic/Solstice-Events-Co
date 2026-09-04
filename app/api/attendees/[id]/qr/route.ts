@@ -20,7 +20,17 @@ export async function GET(
     return NextResponse.json({ error: "Attendee not found" }, { status: 404 });
   }
 
-  const qrDataUrl = await renderQrDataUrl(toQrPayload(attendee.qrCode));
+  // Fast path: serve the image already on file. Falls back to regenerating
+  // (and backfilling) only for rows created before the qr_image column
+  // existed - every attendee created going forward always has one.
+  let qrDataUrl = attendee.qrImage;
+  if (!qrDataUrl) {
+    qrDataUrl = await renderQrDataUrl(toQrPayload(attendee.qrCode));
+    await db
+      .update(attendees)
+      .set({ qrImage: qrDataUrl, updatedAt: new Date() })
+      .where(eq(attendees.id, attendee.id));
+  }
 
   return NextResponse.json({
     attendee: {

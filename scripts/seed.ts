@@ -1,7 +1,12 @@
-import { db } from "../db/client";
-import { attendees } from "../db/schema";
+import { loadEnvConfig } from "@next/env";
+
+loadEnvConfig(process.cwd());
 
 async function main() {
+  const [{ db }, { attendees }] = await Promise.all([
+    import("../db/client"),
+    import("../db/schema"),
+  ]);
   const rows = await db
     .insert(attendees)
     .values([

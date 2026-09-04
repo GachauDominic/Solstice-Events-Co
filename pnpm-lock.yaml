@@ -11,6 +11,9 @@ importers:
       '@neondatabase/serverless':
         specifier: ^0.9.5
         version: 0.9.5
+      '@next/env':
+        specifier: ^16.3.4
+        version: 16.3.4
       amqplib:
         specifier: ^2.0.1
         version: 2.0.1
@@ -499,6 +502,9 @@ packages:
 
   '@next/env@14.2.5':
     resolution: {integrity: sha512-/zZGkrTOsraVfYjGP8uM0p6r0BDT6xWpkjdVbcz66PJVSpwXX3yNiRycxAuDfBKGWBrZBXRuK/YVlkNgxHGwmA==}
+
+  '@next/env@16.3.4':
+    resolution: {integrity: sha512-cjWZnUUa6jZq2kFaNe/ZyJdZonOZ/QoN0Zka2nz/FLOrfx14pQuM9c5RaSVkWMqgdt4ksgPAMWPyHSs/CyV48Q==}
 
   '@next/swc-darwin-arm64@14.2.5':
     resolution: {integrity: sha512-/9zVxJ+K9lrzSGli1///ujyRfon/ZneeZ+v4ptpiPoOU+GKZnm8Wj8ELWU1Pm7GHltYRBklmXMTUqM/DqQ99FQ==}
@@ -1216,6 +1222,8 @@ snapshots:
       '@types/pg': 8.11.6
 
   '@next/env@14.2.5': {}
+
+  '@next/env@16.3.4': {}
 
   '@next/swc-darwin-arm64@14.2.5':
     optional: true

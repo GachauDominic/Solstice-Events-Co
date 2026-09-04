@@ -11,10 +11,12 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "tsx scripts/migrate.ts",
     "db:seed": "tsx scripts/seed.ts",
+    "db:studio": "drizzle-kit studio",
     "simulate": "tsx scripts/simulate.ts"
   },
   "dependencies": {
     "@neondatabase/serverless": "^0.9.5",
+    "@next/env": "^16.3.4",
     "amqplib": "^2.0.1",
     "drizzle-orm": "^0.33.0",
     "html5-qrcode": "^2.3.8",

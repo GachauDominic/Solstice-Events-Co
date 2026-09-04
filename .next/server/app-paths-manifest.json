@@ -2,12 +2,12 @@
   "/_not-found/page": "app/_not-found/page.js",
   "/page": "app/page.js",
   "/register/page": "app/register/page.js",
-  "/api/checkin/route": "app/api/checkin/route.js",
   "/api/checkin/status/route": "app/api/checkin/status/route.js",
-  "/api/attendees/[id]/revoke/route": "app/api/attendees/[id]/revoke/route.js",
   "/api/checkin/[id]/route": "app/api/checkin/[id]/route.js",
-  "/api/webhooks/print-callback/route": "app/api/webhooks/print-callback/route.js",
+  "/api/checkin/route": "app/api/checkin/route.js",
+  "/api/attendees/[id]/revoke/route": "app/api/attendees/[id]/revoke/route.js",
   "/api/attendees/[id]/qr/route": "app/api/attendees/[id]/qr/route.js",
   "/api/attendees/route": "app/api/attendees/route.js",
+  "/api/webhooks/print-callback/route": "app/api/webhooks/print-callback/route.js",
   "/api/webhooks/print-complete/route": "app/api/webhooks/print-complete/route.js"
 }

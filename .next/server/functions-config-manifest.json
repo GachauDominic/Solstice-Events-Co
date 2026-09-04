@@ -1,1 +1,1 @@
-{"version":1,"functions":{"/api/checkin":{},"/api/checkin/[id]":{},"/api/webhooks/print-callback":{}}}
+{"version":1,"functions":{"/api/checkin/[id]":{},"/api/attendees":{},"/api/checkin":{},"/api/attendees/[id]/revoke":{},"/api/attendees/[id]/qr":{},"/api/checkin/status":{},"/api/webhooks/print-callback":{},"/api/webhooks/print-complete":{}}}

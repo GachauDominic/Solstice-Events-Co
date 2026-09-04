@@ -23,6 +23,7 @@ export const attendees = pgTable("attendees", {
   id: uuid("id").defaultRandom().primaryKey(),
   qrCode: varchar("qr_code", { length: 128 }).notNull().unique(),
   name: varchar("name", { length: 256 }).notNull(),
+  revokedAt: timestamp("revoked_at", { withTimezone: true }),
   status: attendeeStatus("status").notNull().default("NOT_CHECKED_IN"),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),

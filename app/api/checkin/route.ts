@@ -25,6 +25,10 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Unknown QR code" }, { status: 404 });
   }
 
+  if (attendee.revokedAt) {
+    return NextResponse.json({ error: "This QR code has been revoked" }, { status: 410 });
+  }
+
   // Fast path: attendee already fully checked in. No print, no new row.
   if (attendee.status === "CHECKED_IN") {
     return NextResponse.json({

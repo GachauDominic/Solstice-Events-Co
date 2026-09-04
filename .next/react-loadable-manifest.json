@@ -1,1 +1,15 @@
-{}
+{
+  "app\\page.tsx -> @/components/QrScanner": {
+    "id": 1196,
+    "files": [
+      "static/chunks/196.08567c2ca2448d87.js"
+    ]
+  },
+  "components\\QrScanner.tsx -> html5-qrcode": {
+    "id": 9145,
+    "files": [
+      "static/chunks/39a02dcd.394689470d70ccae.js",
+      "static/chunks/145.f97f2a93bacb3e09.js"
+    ]
+  }
+}

@@ -1,6 +1,11 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react";
+
+const QrScanner = dynamic(() => import("@/components/QrScanner"), {
+  ssr: false,
+});
 
 type ScanState =
   | { phase: "idle" }
@@ -19,6 +24,7 @@ export default function KioskPage() {
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const isProcessingRef = useRef(false);
 
   useEffect(() => {
     return () => {
@@ -27,11 +33,13 @@ export default function KioskPage() {
     };
   }, []);
 
-  async function handleScan(e: React.FormEvent) {
-    e.preventDefault();
-    if (!qrCode.trim() || isSubmitting) return;
+  async function submitScan(scannedCode: string) {
+    if (!scannedCode || isProcessingRef.current) return;
+    isProcessingRef.current = true;
+    let isPolling = false;
     if (pollRef.current) clearInterval(pollRef.current);
     setIsSubmitting(true);
+    setQrCode(scannedCode);
     setState({ phase: "pending", checkInId: "submitting" });
 
     try {
@@ -47,6 +55,7 @@ export default function KioskPage() {
         return;
       }
       if (data.result === "PENDING" && data.checkInId) {
+        isPolling = true;
         setState({ phase: "pending", checkInId: data.checkInId });
         pollRef.current = setInterval(() => pollStatus(data.checkInId), POLL_INTERVAL_MS);
         timeoutRef.current = setTimeout(() => {
@@ -54,6 +63,7 @@ export default function KioskPage() {
             clearInterval(pollRef.current);
             pollRef.current = null;
             timeoutRef.current = null;
+            isProcessingRef.current = false;
             setState({ phase: "failed", reason: "The printer is taking longer than expected." });
           }
         }, POLL_TIMEOUT_MS);
@@ -64,7 +74,13 @@ export default function KioskPage() {
       setState({ phase: "failed", reason: "Connection issue. Please try scanning again." });
     } finally {
       setIsSubmitting(false);
+      if (!isPolling) isProcessingRef.current = false;
     }
+  }
+
+  function handleScan(e: React.FormEvent) {
+    e.preventDefault();
+    submitScan(qrCode.trim());
   }
 
   async function pollStatus(checkInId: string) {
@@ -78,12 +94,14 @@ export default function KioskPage() {
         if (timeoutRef.current) clearTimeout(timeoutRef.current);
         pollRef.current = null;
         timeoutRef.current = null;
+        isProcessingRef.current = false;
         setState({ phase: "checked_in", attendeeName: data.attendeeName });
       } else if (data.checkInStatus === "FAILED") {
         if (pollRef.current) clearInterval(pollRef.current);
         if (timeoutRef.current) clearTimeout(timeoutRef.current);
         pollRef.current = null;
         timeoutRef.current = null;
+        isProcessingRef.current = false;
         setState({ phase: "failed", reason: data.failureReason });
       }
     } catch {
@@ -96,6 +114,7 @@ export default function KioskPage() {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
     pollRef.current = null;
     timeoutRef.current = null;
+    isProcessingRef.current = false;
     setQrCode("");
     setState({ phase: "idle" });
     inputRef.current?.focus();
@@ -130,6 +149,11 @@ export default function KioskPage() {
           <input ref={inputRef} value={qrCode} onChange={(e) => setQrCode(e.target.value)} aria-label="Event QR code" placeholder="Scan or enter your QR code" className="scan-input" autoFocus disabled={isSubmitting} />
           <button className="scan-button" type="submit" disabled={isSubmitting || !qrCode.trim()}>{isSubmitting ? "Checking..." : "Check in"}</button>
         </form>
+
+        <div className="camera-scanner" aria-label="Camera QR scanner">
+          <QrScanner active={state.phase === "idle" && !isSubmitting} onDecoded={submitScan} />
+          <p className="camera-note">Or point your camera at the event QR code.</p>
+        </div>
 
         <div className="status-panel" data-phase={state.phase} role="status" aria-live="polite">
           <div className="status-icon" aria-hidden="true">{status[2]}</div>

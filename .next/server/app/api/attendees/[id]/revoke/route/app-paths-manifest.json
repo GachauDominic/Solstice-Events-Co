@@ -1,0 +1,3 @@
+{
+  "/api/attendees/[id]/revoke/route": "app/api/attendees/[id]/revoke/route.js"
+}

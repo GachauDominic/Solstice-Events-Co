@@ -7,12 +7,14 @@ export const runtime = "nodejs";
 
 export async function POST(
   _req: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await context.params;
+
   const [updated] = await db
     .update(attendees)
     .set({ revokedAt: new Date(), updatedAt: new Date() })
-    .where(eq(attendees.id, params.id))
+    .where(eq(attendees.id, id))
     .returning();
 
   if (!updated) {

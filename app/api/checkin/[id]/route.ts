@@ -5,9 +5,14 @@ import { checkIns, attendees } from "@/db/schema";
 
 export const runtime = "nodejs";
 
-export async function GET(_req: Request, { params }: { params: { id: string } }) {
+export async function GET(
+  _req: Request,
+  context: { params: Promise<{ id: string }> }
+) {
+  const { id } = await context.params;
+
   const checkIn = await db.query.checkIns.findFirst({
-    where: eq(checkIns.id, params.id),
+    where: eq(checkIns.id, id),
   });
 
   if (!checkIn) {

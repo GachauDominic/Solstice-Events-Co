@@ -1,0 +1,3 @@
+{
+  "/api/webhooks/print-callback/route": "app/api/webhooks/print-callback/route.js"
+}

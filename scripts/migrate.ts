@@ -25,7 +25,7 @@ async function main() {
       .map((statement) => statement.trim())
       .filter(Boolean);
     for (const statement of statements) {
-      await sql(statement);
+      await sql.unsafe(statement);
     }
   }
   console.log("Migrations applied.");

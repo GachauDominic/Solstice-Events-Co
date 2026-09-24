@@ -1,1 +1,13 @@
-{"version":1,"functions":{"/api/checkin/[id]":{},"/api/checkin":{},"/api/checkin/status":{},"/api/webhooks/print-callback":{},"/api/webhooks/print-complete":{},"/api/attendees":{},"/api/attendees/[id]/qr":{},"/api/attendees/[id]/revoke":{}}}
+{
+  "version": 1,
+  "functions": {
+    "/api/attendees": {},
+    "/api/attendees/[id]/qr": {},
+    "/api/attendees/[id]/revoke": {},
+    "/api/checkin": {},
+    "/api/checkin/[id]": {},
+    "/api/checkin/status": {},
+    "/api/webhooks/print-callback": {},
+    "/api/webhooks/print-complete": {}
+  }
+}

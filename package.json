@@ -2,11 +2,12 @@
   "name": "solstice-checkin",
   "version": "1.0.0",
   "private": true,
-  "packageManager": "pnpm@11.22.0+sha512.1ff870c4c6133dfd88fb2afc46dd13d47f09c9794b438c6fdb47ca98caf3bc16381ee0be93a091b8e3824cf01f889f46d7d9e20910fb0be1ab0fb5baa80dd621",
+  "packageManager": "pnpm@12.6.0",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -H 127.0.0.1 -p 3100",
+    "start:prod": "next start -H 0.0.0.0 -p 3000",
     "typecheck": "tsc --noEmit",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "tsx scripts/migrate.ts",
@@ -15,23 +16,23 @@
     "simulate": "tsx scripts/simulate.ts"
   },
   "dependencies": {
-    "@neondatabase/serverless": "^0.9.5",
-    "@next/env": "^16.3.4",
+    "@neondatabase/serverless": "^1.1.0",
+    "@next/env": "^16.3.6",
     "amqplib": "^2.0.1",
-    "drizzle-orm": "^0.33.0",
+    "drizzle-orm": "^0.45.3",
     "html5-qrcode": "^2.3.8",
-    "next": "14.2.5",
+    "next": "16.3.6",
     "qrcode": "^1.5.4",
-    "react": "18.3.1",
-    "react-dom": "18.3.1",
-    "zod": "^4.5.4"
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "zod": "^4.6.5"
   },
   "devDependencies": {
-    "@types/node": "^20.14.0",
+    "@types/node": "^26.6.2",
     "@types/qrcode": "^1.5.6",
-    "@types/react": "^18.3.3",
-    "drizzle-kit": "^0.24.0",
-    "tsx": "^4.16.0",
-    "typescript": "^5.5.4"
+    "@types/react": "^19.3.0",
+    "drizzle-kit": "^0.31.11",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2"
   }
 }
